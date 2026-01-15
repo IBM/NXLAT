@@ -1,0 +1,34 @@
+# Copyright (C) 2025 IBM Corporation.
+
+# Host specific XLAT configuration file
+host:
+  port: enp7s0                        # Network interface to send/receive IPv6 traffic 
+  mtu: 9000                           # Max path MTU 
+  ipv4addr: '192.168.100.104/24'      # IPv4 address of the host that gets translated into IPv6
+  ipv4gateway: '192.168.100.1'        # The IPv4 gateway address
+  ipv6addr: '2001:db8:100::104/64'    # IPv6 address of the host that gets translated into IPv4
+  ipv6gateway: '2001:db8:100::1'      # IPv6 gateway to reach client IPv6 subnets
+
+# Client network and services running on the client side
+clients:
+  ipv6-subnets: ['2001:db8:200::/64'] # Clients use IPv6 (routable) addresses from these subnets
+  ipv4-subnet: '172.31.0.0/16'        # Locally assigned IPv4 addresses to clients from this subnet
+  protocol: tcp                       # Application transport protocol
+  svc-ports: [1234]                   # Services (application port numbers) running on the client networks
+
+# Services running on this host
+servers:
+  protocol: tcp                       # Application transport protocol
+  svc-ports: [2345, 3456]             # Services (application port numbers running on this server
+  
+# Internal configuration parameters (should not be modified)
+siit:
+  name: SIIT                          # Name of the network namespace 
+  veth_out: siit6                     # Virtual network interface name of SIIT namespace (IPv6 side)
+  veth_out_peer: siit6p               # Internal virtual network interface name inside the namespace (IPv6 side)
+  veth_in: siit4                      # Virtual network interface name of SIIT namespace (IPv4 side)
+  veth_in_peer: siit4p                # Internal virtual network interface name inside the namespace (IPv4 side)
+  ipv4addr: '192.168.255.1/30'        # Private IPv4 address inside the namespace 
+  ipv4gateway: '192.168.255.2'        # Private IPv4 gateway for translated IPv4 packets to leave the namespace
+  ipv6addr: 'fd00:ab:cd::1/64'        # Private IPv6 address inside the namespace
+  ipv6gateway: 'fd00:ab:cd::2'        # Private IPv6 gateway for translated IPv6 packets to leave the namespace
